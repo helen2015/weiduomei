@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>New Document</title>
+    <style>
+        ul,li,table{
+            margin: 0;
+            padding: 0;
+        }
+        #menu{
+            list-style: none;
+        }
+        #menu li{
+            width: 120px;
+            float: left;
+            font-size: 16px;
+            color: #333;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .active{
+            background: #e4393c;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<h1>味多美</h1>
+<ul id="menu">
+    <li class="active" id="1">慕斯蛋糕</li>
+    <li id="2">奶油蛋糕</li>
+    <li id="3">法式蛋糕</li>
+    <li id="4">乳酪蛋糕</li>
+</ul>
+<table border="1" width="80%" style="text-align: center;border-collapse: collapse;">
+    <thead>
+    <tr>
+        <td>蛋糕图片</td>
+        <td>蛋糕名称</td>
+        <td>蛋糕价格</td>
+        <td>蛋糕尺寸</td>
+    </tr>
+    </thead>
+    <tbody id="tb1"></tbody>
+</table>
+<script src="js/jquery-1.11.3.js"></script>
+<script>
+    $.ajax({
+        url: "cake_getall.php",
+        data: {tid: 1},
+        success: function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                html += `
+                        <tr>
+                            <td><img src="img/${obj.pic}" width="120" height="100"/></td>
+                            <td>${obj.cname}</td>
+                            <td>${obj.price}</td>
+                            <td>${obj.size}</td>
+                        </tr>
+                    `;
+            }
+            tb1.innerHTML = html;
+        },
+        error: function () {
+            alert("网络出现故障，请检查")
+        }
+    });
+    $("#menu li").hover(function(){
+        $(this).addClass("active").siblings().removeClass("active");
+        var id2=$(this).attr("id");
+        $.ajax({
+            url: "cake_getall.php",
+            data: {tid: id2},
+            success: function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    var obj = data[i];
+                    html += `
+                        <tr>
+                            <td><img src="img/${obj.pic}" width="120" height="100"/></td>
+                            <td>${obj.cname}</td>
+                            <td>${obj.price}</td>
+                            <td>${obj.size}</td>
+                        </tr>
+                    `;
+                }
+                tb1.innerHTML = html;
+            },
+            error: function () {
+                alert("网络出现故障，请检查")
+            }
+        })
+    },function(){
+
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
